@@ -35,10 +35,10 @@ export async function createUser(options: {vkId:number, name: string, lastName: 
    
 }
 
-export async function updateUser(id:number, options: {free_tier: boolean}) {
+export async function updateUser(vkId:number, options: {free_tier: boolean}) {
     const {free_tier} = options
     try {
-        return await db.users.update({where: {id}, data: { 
+        return await db.users.update({where: {vkId: vkId}, data: { 
             free_tier: free_tier
         }})
     } catch (e: unknown) {

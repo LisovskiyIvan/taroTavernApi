@@ -8,17 +8,17 @@ export const app = new Elysia().get("/", () => "taro api")
 
 app.use(cors({
   origin: true,
-  methods: ["GET", "POST", "DELETE"]
+  methods: ["GET", "POST", "DELETE", "PATCH"]
 }))
 app
   .group('/api', (app) => app.use(userRoutes))
-  // .group('/api', (app) => app.use(llamaRoutes))
+  .group('/api', (app) => app.use(llamaRoutes))
   .group('/api', (app) => app.use(payRouter))
 
 
 
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 5001);
 
 console.log(
   `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`
