@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors'
-import userRoutes from "./routes/users/users";
+
 import llamaRoutes from "./routes/llama/llama";
 import payRouter from "./routes/pay/pay";
 
@@ -8,10 +8,9 @@ export const app = new Elysia().get("/", () => "taro api")
 
 app.use(cors({
   origin: true,
-  methods: ["GET", "POST", "DELETE", "PATCH"]
+  methods: ["GET", "POST", "DELETE"]
 }))
 app
-  .group('/api', (app) => app.use(userRoutes))
   .group('/api', (app) => app.use(llamaRoutes))
   .group('/api', (app) => app.use(payRouter))
 

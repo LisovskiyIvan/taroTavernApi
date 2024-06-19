@@ -8,12 +8,10 @@
   "dependencies": {
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/stream": "^1.0.2",
-    "@prisma/client": "^5.15.0",
     "elysia": "latest"
   },
   "devDependencies": {
-    "bun-types": "latest",
-    "prisma": "^5.15.0"
+    "bun-types": "latest"
   },
   "module": "src/index.js"
 }
