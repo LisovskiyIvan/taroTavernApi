@@ -1,4 +1,11 @@
+
 import db from '../../db'
+
+enum UserStatus {
+    ok = 'success',
+    notok = 'No user found',
+    new = 'New user created'
+}
 
 export async function getUsers() {
     try {
@@ -8,30 +15,31 @@ export async function getUsers() {
     }
 }
 export async function getUserById(id: number) {
-    try {
-        const user = await db.users.findUniqueOrThrow({where: {id}})
-        return user
-    } catch (e: unknown) {
-        console.log(`getUserById error ${e}`)
-    }
+        const user = await db.users.findUnique({where: {vkId: id}})
+      
+        return user != null ? {...user, status: UserStatus.ok} : {status: UserStatus.notok}
+    
 }
 
-export async function createUser(options: {name: string, password: string, free_tier: boolean}) {
-    try {
-        const {name, password, free_tier} = options
-        return await db.users.create({data: {name, password, free_tier}})
-    } catch (e: unknown) {
-        console.log(`createUser error ${e}`)
-    }
+export async function createUser(options: {vkId:number, name: string, lastName: string}) {
+
+        const {vkId, name, lastName} = options
+        const user = await getUserById(vkId)
+        if (user.status == UserStatus.ok) return user
+        else {
+            const newUser = await db.users.create({data: {vkId, name, lastName}})
+            return {...newUser, status: UserStatus.new}
+        }
+         
+       
+   
 }
 
-export async function updateUser(id:number, options: {name?: string, password?: string, free_tier?: boolean}) {
-    const {name, password, free_tier} = options
+export async function updateUser(id:number, options: {free_tier: boolean}) {
+    const {free_tier} = options
     try {
         return await db.users.update({where: {id}, data: { 
-            ...(name ? {name}: {}),
-            ...(password ? {password}: {}),
-            ...(free_tier != undefined ? {free_tier}: {})
+            free_tier: free_tier
         }})
     } catch (e: unknown) {
         console.log(`updateUser error ${e}`)
@@ -41,7 +49,7 @@ export async function updateUser(id:number, options: {name?: string, password?: 
 
 export async function deleteUser(id: number) {
     try {
-        return await db.users.delete({where: {id}})
+        return await db.users.delete({where: {vkId: id}})
     } catch (e: unknown) {
         console.log(`deleteUser error ${e}`)
     }

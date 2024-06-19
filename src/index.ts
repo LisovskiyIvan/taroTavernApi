@@ -1,28 +1,21 @@
 import { Elysia } from "elysia";
+import { cors } from '@elysiajs/cors'
 import userRoutes from "./routes/users/users";
+import llamaRoutes from "./routes/llama/llama";
+import payRouter from "./routes/pay/pay";
 
-const app = new Elysia().get("/", () => "taro api")
+export const app = new Elysia().get("/", () => "taro api")
 
-
+app.use(cors({
+  origin: true,
+  methods: ["GET", "POST", "DELETE"]
+}))
 app
   .group('/api', (app) => app.use(userRoutes))
-
-// import ollama from 'ollama'
-
-
-// const modelfile = `
-// FROM llama3
-// SYSTEM "Ты лучшая гадалка на свете. Отвечай развернутыми сообщениями и сообщай судьбу своим друзьям"
-// `
-
-// await ollama.create({ model: 'qwe', modelfile: modelfile })
+  // .group('/api', (app) => app.use(llamaRoutes))
+  .group('/api', (app) => app.use(payRouter))
 
 
-// const response = await ollama.chat({
-//   model: 'qwe',
-//   messages: [{ role: 'user', content: 'Буду ли я счастлива с моим пьющем мужем. Хотя он иногда меня бьет' }],
-// })
-// console.log(response.message.content)
 
 
 app.listen(process.env.PORT || 3000);

@@ -7,17 +7,15 @@ const userRoutes = new Elysia({prefix: '/users'})
     .get('/:id', async ({params: {id}}) => await getUserById(parseInt(id)))
     .post('/', async ( {body}) => createUser(body), {
         body: t.Object({
+            vkId: t.Number(),
             name: t.String (),
-            password: t.String (),
-            free_tier: t.Boolean()
+            lastName: t.String ()
         })
     })
     .patch('/:id', async ({params: {id}, body})=>await updateUser(parseInt(id), body), {
         body: t.Object({
-            name: t.Optional(t.String()),
-            password: t.Optional(t.String()),
-            free_tier: t.Optional(t.Boolean())
-        }, { minProperties: 1})
+            free_tier: t.Boolean()
+        })
     })
     .delete('/:id', async({params: {id}})=>await deleteUser(parseInt(id)))
 
